@@ -36,8 +36,8 @@ public class Walker {
     }
 
     public void drawMe (SpriteBatch batch, Vector2 loc, int frame, int direction) {
-        this.sprites[frame][direction].setSize(256, 256);
-        this.sprites[frame][direction].setPosition(loc.x - 128, loc.y);
+        this.sprites[frame][direction].setSize(128, 128);
+        this.sprites[frame][direction].setPosition(loc.x - 64, loc.y);
         this.sprites[frame][direction].draw(batch);
     }
 
