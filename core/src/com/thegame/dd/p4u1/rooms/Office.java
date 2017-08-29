@@ -3,28 +3,46 @@ package com.thegame.dd.p4u1.rooms;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.thegame.dd.p4u1.things.Desk;
+import com.thegame.dd.p4u1.things.Thing;
+import com.thegame.dd.p4u1.utils.Duple;
+
+import java.util.Iterator;
 
 /**
  * Created by Paul on 8/28/2017.
  */
 
 public class Office extends Room {
-    boolean[][] ground;
-
     Texture img;
     Sprite bg;
+    Map map;
+
+    Desk desk;
 
     public Office() {
         super();
+        desk = new Desk();
+        desk.setLocation(new Duple(1,2));
+        things.add(desk);
+
         ground = Room.blankGround();
         for (int x = 0 ; x < 10; x++) {
-            ground[x][0] = false;
-            ground[x][1] = false;
+            ground[x][3] = false;
+            ground[x][4] = false;
         }
+        ground[1][2] = false;
+        ground[2][2] = false;
+
+        ground[6][2] = false;
+        ground[7][2] = false;
 
         img = new Texture("places/office_bg.png");
         bg = new Sprite(img);
         bg.setSize(1000, 500);
+
+        map = new Map(ground);
+        map.origin = map.spots[1][0];
     }
     @Override
     public boolean[][] getGround() {
@@ -32,8 +50,16 @@ public class Office extends Room {
     }
 
     @Override
+    public Map getMap() {
+        return map;
+    }
+
+    @Override
     public void drawMe(SpriteBatch batch) {
         bg.draw(batch);
+        for (Iterator<Thing> iter = things.iterator(); iter.hasNext();) {
+            iter.next().drawMe(batch);
+        }
     }
 
     @Override

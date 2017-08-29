@@ -10,10 +10,18 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
+import com.thegame.dd.p4u1.characters.Character;
+import com.thegame.dd.p4u1.characters.Paul;
 import com.thegame.dd.p4u1.rooms.Office;
 import com.thegame.dd.p4u1.rooms.Room;
+import com.thegame.dd.p4u1.utils.Duple;
+import com.thegame.dd.p4u1.utils.PaulGraphics;
 import com.thegame.dd.p4u1.utils.Walker;
+
+import java.util.ArrayList;
+import java.util.Iterator;
 
 /*
 
@@ -26,23 +34,34 @@ get to another room
 
  */
 
-public class TheGame extends ApplicationAdapter {
+public class TheGame extends ApplicationAdapter implements GestureDetector.GestureListener{
 	SpriteBatch batch;
 
-	Walker walker;
 	OrthographicCamera camera;
 	ShapeRenderer shapeRenderer;
 	boolean showGrid = false;
+	ArrayList<Character> characters;
 
 	Office thisRoom;
+	Paul paul;
+
+	boolean tapping = false;
+	Vector2 tap;
+
+	ArrayList<Vector2> clicks;
 	
 	@Override
 	public void create () {
+        Gdx.input.setInputProcessor(new GestureDetector(this));
+	    clicks = new ArrayList<Vector2>();
 	    thisRoom = new Office();
+	    paul = new Paul(thisRoom.getMap().origin.location);
+	    characters = new ArrayList<Character>();
+	    characters.add(paul);
+
 		batch = new SpriteBatch();
-		walker = new Walker();
 		camera = new OrthographicCamera();
-		camera.setToOrtho(false, 1000, 500);
+		camera.setToOrtho(false, PaulGraphics.GAME_WIDTH, PaulGraphics.GAME_HEIGHT);
 		shapeRenderer = new ShapeRenderer();
 	}
 
@@ -50,6 +69,17 @@ public class TheGame extends ApplicationAdapter {
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             showGrid = !showGrid;
         }
+
+		for(Iterator<Character> iter = characters.iterator(); iter.hasNext(); ) {
+			Character curr = iter.next();
+			curr.update();
+		}
+
+		if (tapping) {
+            clicks.add(tap.cpy());
+            paul.moveTo(PaulGraphics.pixelToDuple(tap.cpy()), thisRoom);
+        	tapping = false;
+		}
     }
 
     public void showGrid() {
@@ -61,6 +91,11 @@ public class TheGame extends ApplicationAdapter {
         for (int j = 0; j < 500; j+= 100) {
             shapeRenderer.line(0, j, 1000,  j);
         }
+        shapeRenderer.setColor(Color.RED);
+        for (Iterator<Vector2> iter = clicks.iterator(); iter.hasNext();) {
+            Vector2 coord = PaulGraphics.pixelToCoord(iter.next());
+            shapeRenderer.circle(coord.x, coord.y, 3);
+        }
         shapeRenderer.end();
     }
 
@@ -70,9 +105,13 @@ public class TheGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.setProjectionMatrix(camera.combined);
 		shapeRenderer.setProjectionMatrix(camera.combined);
+
 		batch.begin();
 		thisRoom.drawMe(batch);
-		walker.drawMe(batch, new Vector2(800,100), 0, 0);
+		for(Iterator<Character> iter = characters.iterator(); iter.hasNext(); ) {
+			Character curr = iter.next();
+			curr.drawMe(batch);
+		}
 		batch.end();
 		logic();
 		if (showGrid) {
@@ -85,4 +124,52 @@ public class TheGame extends ApplicationAdapter {
 		batch.dispose();
         thisRoom.dispose();
     }
+
+	@Override
+	public boolean touchDown(float x, float y, int pointer, int button) {
+		return false;
+	}
+
+
+	@Override
+	public boolean tap(float x, float y, int count, int button) {
+		tapping = true;
+		tap = new Vector2(x, y);
+		return false;
+	}
+
+	@Override
+	public boolean longPress(float x, float y) {
+		return false;
+	}
+
+	@Override
+	public boolean fling(float velocityX, float velocityY, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		return false;
+	}
+
+	@Override
+	public boolean panStop(float x, float y, int pointer, int button) {
+		return false;
+	}
+
+	@Override
+	public boolean zoom(float initialDistance, float distance) {
+		return false;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+		return false;
+	}
+
+	@Override
+	public void pinchStop() {
+
+	}
 }

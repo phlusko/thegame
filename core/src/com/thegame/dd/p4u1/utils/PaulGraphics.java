@@ -9,17 +9,32 @@ import com.badlogic.gdx.math.Vector2;
 
 public class PaulGraphics {
 
-    public static final float width = Gdx.graphics.getWidth();
-    public static final float height = Gdx.graphics.getHeight();
+    public static float width = Gdx.graphics.getWidth();
+    public static float height = Gdx.graphics.getHeight();
     public static final float GAME_WIDTH = 1000f;
     public static final float GAME_HEIGHT = 500f;
 
-    static public Vector2 pixelToCoord(Vector2 arg0) {
+    private static void updateSize() {
+        width = Gdx.graphics.getWidth();
+        height = Gdx.graphics.getHeight();
+    }
 
+    static public Vector2 pixelToCoord(Vector2 arg0) {
+        updateSize();
         float x = (arg0.x * GAME_WIDTH) / width;
         float y = ((height - arg0.y) * GAME_HEIGHT) / height;
 
         return new Vector2(x, y);
+    }
+
+    static public Duple pixelToDuple(Vector2 arg0) {
+        Vector2 coord = pixelToCoord(arg0);
+
+        return new Duple((int)(coord.x / 100), (int)(coord.y / 100));
+    }
+
+    static public Vector2 dupleToCoord(Duple duple) {
+        return new Vector2((duple.x * 100) + 50, (duple.y * 100) + 50);
     }
 
     static public float getAngleFromVectors(Vector2 arg0, Vector2 center) {
