@@ -23,7 +23,7 @@ public abstract class Room {
             Thing curr = iter.next();
             for(int x = 0; x < curr.width; x++) {
                 for(int y = 0; y < curr.height; y++) {
-                    ground[x][y] = false;
+                    ground[x+curr.location.x][y+curr.location.y] = false;
                 }
             }
         }

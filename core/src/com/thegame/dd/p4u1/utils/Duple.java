@@ -25,6 +25,9 @@ public class Duple {
         y += arg0.y;
     }
 
+    public static Duple subtract(Duple a, Duple b) {
+        return new Duple(a.x - b.x, a.y - b.y);
+    }
     public static Duple add(Duple a, Duple b) {
         return new Duple(a.x + b.x, a.y + b.y);
     }

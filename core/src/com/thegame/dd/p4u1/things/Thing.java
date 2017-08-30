@@ -25,7 +25,9 @@ public abstract class Thing {
                 && arg0.y >= location.y);
     }
     public Spot getAccessSpot(Map map) {
-        return map.getSpot(Duple.add(location, accessPoint));
+        Duple yo = Duple.add(location, accessPoint);
+        System.out.println(yo);
+        return map.getSpot(yo);
     }
 
     abstract public void update();

@@ -131,6 +131,7 @@ public class Map {
     }
 
     public Spot getSpot(Duple arg0) {
+        System.out.println(spots[arg0.x][arg0.y].location + "+++");
         return spots[arg0.x][arg0.y];
     }
 

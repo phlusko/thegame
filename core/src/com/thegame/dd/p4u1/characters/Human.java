@@ -23,6 +23,10 @@ public class Human extends Character {
 
     boolean walking;
     int walkingSpeed = 333;
+    int animSpeed = 150;
+    int direction = 0;
+    int frame = 0;
+    long lastAnim;
     long lastStepTime;
     Spot[] path;
     int spotIndex;
@@ -42,28 +46,54 @@ public class Human extends Character {
         destination = moveTo;
         Map arg0 = room.getMap();
         if (moveTo.same(location)) {
-            return;
-        }
-        if (!arg0.getSpot(moveTo).ground) {
+            interacting = false;
             return;
         }
 
         if (room.isDupleInThing(moveTo)) {
             toThing = true;
+            if (target != null && !target.equals(room.getThingAtDuple(moveTo))) {
+                interacting = false;
+            }
             target = room.getThingAtDuple(moveTo);
             destination = target.getAccessSpot(arg0).location;
         } else {
+            if (!arg0.getSpot(moveTo).ground) {
+                return;
+            }
             toThing = false;
             target = null;
             interacting = false;
         }
+        if (destination.same(location)) {
+            interacting = true;
+            return;
+        }
         walking = true;
         map = arg0;
-        path = map.getPath(location, moveTo);
+        path = map.getPath(location, destination);
+        if (path == null) {
+            walking = false;
+            return;
+        }
         spotIndex = 0;
-        System.out.println(Map.pathToString(path));
-        System.out.println(path.length);
+        //System.out.println(Map.pathToString(path));
+        //System.out.println(path.length);
         lastStepTime = TimeUtils.millis();
+        lastAnim = TimeUtils.millis();
+    }
+
+    public void updateDirection(Duple a, Duple b) {
+        Duple diff = Duple.subtract(b, a);
+        if (diff.x > 0){
+            direction = 2;
+        } else if (diff.x < 0){
+            direction = 3;
+        } else if (diff.y > 0) {
+            direction = 1;
+        }else {
+            direction = 0;
+        }
     }
 
     @Override
@@ -71,15 +101,25 @@ public class Human extends Character {
         if (walking && (TimeUtils.millis() - lastStepTime > walkingSpeed)) {
             lastStepTime = TimeUtils.millis();
             spotIndex++;
+            updateDirection(location, path[spotIndex].location);
             location = path[spotIndex].location;
             if (destination.same(location)) {
                 walking = false;
+                frame = 0;
                 if (toThing) {
                     toThing = false;
                     interacting = true;
                 }
             }
         }
+        if (walking && (TimeUtils.millis() - lastAnim > animSpeed)) {
+            frame++;
+            if (frame == 4) {
+                frame = 0;
+            }
+            lastAnim = TimeUtils.millis();
+        }
+
     }
 
     @Override
@@ -93,7 +133,7 @@ public class Human extends Character {
         if (interacting) {
             coord.add(target.usingOffset);
         }
-        walker.drawMe(batch, PaulGraphics.dupleToCoord(location), 0,0);
+        walker.drawMe(batch, coord, frame,direction);
     }
 
     @Override

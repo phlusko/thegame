@@ -12,7 +12,7 @@ import com.badlogic.gdx.math.Vector2;
  */
 
 public class Walker {
-    Sprite[][] sprites = new Sprite[4][3];
+    Sprite[][] sprites = new Sprite[4][4];
     Texture sprite_texture;
     TextureRegion sprite_region;
 
@@ -25,13 +25,15 @@ public class Walker {
         this.sprite_texture = new Texture(Gdx.files.internal("characters/paul.png"));
        // this.sprite_texture2 = new Texture(Gdx.files.internal("penguin.png"));
 
-        int i = 0;
-        int di = 0;
-        for(int j = 0; j < 4; j++) {
-            this.sprite_region = new TextureRegion(this.sprite_texture, 0 + (j * 256), 0 + (di * 256), 256, 256);
-           // this.sprite_region2 = new TextureRegion(this.sprite_texture2, 0 + (j * 256), 0 + (di * 256), 256, 256);
-            this.sprites[j][i] = new Sprite(sprite_region);
-           // this.sprites2[j][i] = new Sprite(sprite_region2);
+        //int i = 0;
+        //int di = 0;
+        for(int i = 0; i < 4; i++) {
+            for (int j = 0; j < 4; j++) {
+                this.sprite_region = new TextureRegion(this.sprite_texture, 0 + (j * 256), 0 + (i * 256), 256, 256);
+                // this.sprite_region2 = new TextureRegion(this.sprite_texture2, 0 + (j * 256), 0 + (di * 256), 256, 256);
+                this.sprites[j][i] = new Sprite(sprite_region);
+                // this.sprites2[j][i] = new Sprite(sprite_region2);
+            }
         }
     }
 

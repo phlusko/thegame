@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.thegame.dd.p4u1.things.Desk;
+import com.thegame.dd.p4u1.things.Drums;
 import com.thegame.dd.p4u1.things.Thing;
 import com.thegame.dd.p4u1.utils.Duple;
 
@@ -19,28 +20,27 @@ public class Office extends Room {
     Map map;
 
     Desk desk;
+    Drums drums;
 
     public Office() {
         super();
         desk = new Desk();
         desk.setLocation(new Duple(1,2));
+        drums = new Drums();
+        drums.setLocation(new Duple(6,2));
         things.add(desk);
+        things.add(drums);
 
         ground = Room.blankGround();
         for (int x = 0 ; x < 10; x++) {
             ground[x][3] = false;
             ground[x][4] = false;
         }
-        ground[1][2] = false;
-        ground[2][2] = false;
-
-        ground[6][2] = false;
-        ground[7][2] = false;
 
         img = new Texture("places/office_bg.png");
         bg = new Sprite(img);
         bg.setSize(1000, 500);
-
+        removeThingGround();
         map = new Map(ground);
         map.origin = map.spots[1][0];
     }
