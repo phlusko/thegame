@@ -14,8 +14,12 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.thegame.dd.p4u1.characters.Character;
 import com.thegame.dd.p4u1.characters.Paul;
+import com.thegame.dd.p4u1.rooms.Hallway;
 import com.thegame.dd.p4u1.rooms.Office;
 import com.thegame.dd.p4u1.rooms.Room;
+import com.thegame.dd.p4u1.things.Exit;
+import com.thegame.dd.p4u1.things.FaceDoor;
+import com.thegame.dd.p4u1.things.TopDoor;
 import com.thegame.dd.p4u1.utils.Duple;
 import com.thegame.dd.p4u1.utils.PaulGraphics;
 import com.thegame.dd.p4u1.utils.Walker;
@@ -42,7 +46,9 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 	boolean showGrid = false;
 	ArrayList<Character> characters;
 
-	Office thisRoom;
+	Room thisRoom;
+	Office office;
+	Hallway hallway;
 	Paul paul;
 
 	boolean tapping = false;
@@ -54,7 +60,12 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 	public void create () {
         Gdx.input.setInputProcessor(new GestureDetector(this));
 	    clicks = new ArrayList<Vector2>();
-	    thisRoom = new Office();
+	    office = new Office();
+	    hallway = new Hallway();
+	    hallway.addExits(new FaceDoor(office));
+	    office.addExit(new TopDoor(hallway));
+	    thisRoom = office;
+        //thisRoom = hallway;
 	    paul = new Paul(thisRoom.getMap().origin.location);
 	    characters = new ArrayList<Character>();
 	    characters.add(paul);
@@ -65,6 +76,13 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 		shapeRenderer = new ShapeRenderer();
 	}
 
+	public void changeRoom(Room newRoom, Duple newlocation) {
+        tapping = false;
+        paul.stop();
+        thisRoom = newRoom;
+        paul.location = newlocation;
+    }
+
 	public void logic() {
         if (Gdx.input.isKeyJustPressed(Input.Keys.G)) {
             showGrid = !showGrid;
@@ -74,10 +92,13 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 			Character curr = iter.next();
 			curr.update();
 		}
+		if (paul.exiting) {
+            changeRoom(paul.exit.newRoom, paul.exit.newLocation);
+        }
 
 		if (tapping) {
             clicks.add(tap.cpy());
-            paul.moveTo(PaulGraphics.pixelToDuple(tap.cpy()), thisRoom);
+            paul.handleClick(PaulGraphics.pixelToDuple(tap.cpy()), thisRoom);
         	tapping = false;
 		}
     }

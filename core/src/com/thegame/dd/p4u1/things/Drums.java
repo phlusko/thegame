@@ -25,10 +25,6 @@ public class Drums extends Thing{
         sprite.setSize(200, 200);
     }
 
-    public void setLocation(Duple arg0){
-        location = arg0;
-        sprite.setPosition(arg0.x *100, arg0.y * 100);
-    }
     @Override
     public void update() {
 
@@ -36,6 +32,7 @@ public class Drums extends Thing{
 
     @Override
     public void drawMe(SpriteBatch arg0) {
+        sprite.setPosition(location.x *100, location.y * 100);
         sprite.draw(arg0);
     }
 }

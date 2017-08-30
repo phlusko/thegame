@@ -1,6 +1,7 @@
 package com.thegame.dd.p4u1.rooms;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.thegame.dd.p4u1.things.Exit;
 import com.thegame.dd.p4u1.things.Thing;
 import com.thegame.dd.p4u1.utils.Duple;
 
@@ -14,6 +15,7 @@ import java.util.Iterator;
 public abstract class Room {
     public ArrayList<Thing> things;
     public boolean[][] ground;
+    public Map map;
     public Room(){
         things = new ArrayList<Thing>();
     }
@@ -21,9 +23,11 @@ public abstract class Room {
     public void removeThingGround() {
         for (Iterator<Thing> iter = things.iterator(); iter.hasNext();) {
             Thing curr = iter.next();
-            for(int x = 0; x < curr.width; x++) {
-                for(int y = 0; y < curr.height; y++) {
-                    ground[x+curr.location.x][y+curr.location.y] = false;
+            if (curr.clip) {
+                for (int x = 0; x < curr.width; x++) {
+                    for (int y = 0; y < curr.height; y++) {
+                        ground[x + curr.location.x][y + curr.location.y] = false;
+                    }
                 }
             }
         }

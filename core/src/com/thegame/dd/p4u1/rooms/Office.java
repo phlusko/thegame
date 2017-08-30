@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.thegame.dd.p4u1.things.Desk;
 import com.thegame.dd.p4u1.things.Drums;
+import com.thegame.dd.p4u1.things.Exit;
 import com.thegame.dd.p4u1.things.Thing;
 import com.thegame.dd.p4u1.utils.Duple;
 
@@ -17,7 +18,6 @@ import java.util.Iterator;
 public class Office extends Room {
     Texture img;
     Sprite bg;
-    Map map;
 
     Desk desk;
     Drums drums;
@@ -42,7 +42,15 @@ public class Office extends Room {
         bg.setSize(1000, 500);
         removeThingGround();
         map = new Map(ground);
+        map.getSpot(new Duple(4, 0)).east = null;
+        map.getSpot(new Duple(5, 0)).west = null;
         map.origin = map.spots[1][0];
+    }
+
+    public void addExit(Exit exit) {
+        exit.setLocation(new Duple(4, 0));
+        exit.newLocation = new Duple(6, 1);
+        things.add(exit);
     }
     @Override
     public boolean[][] getGround() {

@@ -12,7 +12,7 @@ import com.thegame.dd.p4u1.utils.PaulGraphics;
 
 public abstract class Character {
     int life;
-    Duple location;
+    public Duple location;
 
     public Character() {
         life = 100;

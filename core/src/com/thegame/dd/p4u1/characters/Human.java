@@ -6,7 +6,9 @@ import com.badlogic.gdx.utils.TimeUtils;
 import com.thegame.dd.p4u1.rooms.Map;
 import com.thegame.dd.p4u1.rooms.Room;
 import com.thegame.dd.p4u1.rooms.Spot;
+import com.thegame.dd.p4u1.things.Exit;
 import com.thegame.dd.p4u1.things.Thing;
+import com.thegame.dd.p4u1.things.TopDoor;
 import com.thegame.dd.p4u1.utils.Duple;
 import com.thegame.dd.p4u1.utils.PaulGraphics;
 import com.thegame.dd.p4u1.utils.Walker;
@@ -34,21 +36,37 @@ public class Human extends Character {
     boolean toThing = false;
     boolean interacting;
     Thing target;
+    public boolean exiting;
+    public Exit exit;
+
 
     public Human() {
         super();
         interacting = false;
         walker = new Walker();
+        frame = 0;
+        direction = 0;
+    }
+
+    public void stop(){
+        exiting = false;
+        interacting = false;
+        toThing = false;
+        walking = false;
+    }
+
+    public void handleClick(Duple click, Room room) {
+        if (click.same(location)) {
+            interacting = false;
+            return;
+        }
+        moveTo(click, room);
     }
 
     @Override
     public void moveTo(Duple moveTo, Room room) {
-        destination = moveTo;
+        //destination = moveTo;
         Map arg0 = room.getMap();
-        if (moveTo.same(location)) {
-            interacting = false;
-            return;
-        }
 
         if (room.isDupleInThing(moveTo)) {
             toThing = true;
@@ -61,12 +79,17 @@ public class Human extends Character {
             if (!arg0.getSpot(moveTo).ground) {
                 return;
             }
+            destination = moveTo;
             toThing = false;
             target = null;
             interacting = false;
         }
         if (destination.same(location)) {
             interacting = true;
+            if (target.getClass().getSuperclass() == Exit.class) {
+                exiting = true;
+                exit = (Exit)target;
+            }
             return;
         }
         walking = true;
@@ -109,6 +132,10 @@ public class Human extends Character {
                 if (toThing) {
                     toThing = false;
                     interacting = true;
+                    if (target.getClass().getSuperclass() == Exit.class) {
+                        this.exiting = true;
+                        exit = (Exit)target;
+                    }
                 }
             }
         }

@@ -16,8 +16,11 @@ public abstract class Thing {
     public int height;
     public Vector2 usingOffset;
     public Duple accessPoint;
+    public boolean clip = true;
 
-
+    public void setLocation(Duple arg0){
+        location = arg0;
+    }
     public boolean isDupleInThing(Duple arg0) {
         return (arg0.x < location.x + width
                 && arg0.x >= location.x
