@@ -17,6 +17,7 @@ public abstract class Thing {
     public Vector2 usingOffset;
     public Duple accessPoint;
     public boolean clip = true;
+    public int engageDirection = 0;
 
     public void setLocation(Duple arg0){
         location = arg0;
@@ -29,7 +30,7 @@ public abstract class Thing {
     }
     public Spot getAccessSpot(Map map) {
         Duple yo = Duple.add(location, accessPoint);
-        System.out.println(yo);
+        //System.out.println(yo);
         return map.getSpot(yo);
     }
 

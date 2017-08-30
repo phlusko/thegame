@@ -10,6 +10,7 @@ import com.thegame.dd.p4u1.things.Exit;
 import com.thegame.dd.p4u1.things.Thing;
 import com.thegame.dd.p4u1.things.TopDoor;
 import com.thegame.dd.p4u1.utils.Duple;
+import com.thegame.dd.p4u1.utils.JazzHands;
 import com.thegame.dd.p4u1.utils.PaulGraphics;
 import com.thegame.dd.p4u1.utils.Walker;
 
@@ -19,12 +20,14 @@ import com.thegame.dd.p4u1.utils.Walker;
 
 public class Human extends Character {
     Walker walker;
+    JazzHands jazzhands;
 
     Duple destination;
     Map map;
 
     boolean walking;
     int walkingSpeed = 333;
+    int jazzHandsSpeed = 75;
     int animSpeed = 150;
     int direction = 0;
     int frame = 0;
@@ -44,6 +47,7 @@ public class Human extends Character {
         super();
         interacting = false;
         walker = new Walker();
+        jazzhands = new JazzHands();
         frame = 0;
         direction = 0;
     }
@@ -86,6 +90,7 @@ public class Human extends Character {
         }
         if (destination.same(location)) {
             interacting = true;
+            lastAnim = TimeUtils.millis();
             if (target.getClass().getSuperclass() == Exit.class) {
                 exiting = true;
                 exit = (Exit)target;
@@ -130,8 +135,10 @@ public class Human extends Character {
                 walking = false;
                 frame = 0;
                 if (toThing) {
+                    direction = target.engageDirection;
                     toThing = false;
                     interacting = true;
+                    lastAnim = TimeUtils.millis();
                     if (target.getClass().getSuperclass() == Exit.class) {
                         this.exiting = true;
                         exit = (Exit)target;
@@ -140,6 +147,13 @@ public class Human extends Character {
             }
         }
         if (walking && (TimeUtils.millis() - lastAnim > animSpeed)) {
+            frame++;
+            if (frame == 4) {
+                frame = 0;
+            }
+            lastAnim = TimeUtils.millis();
+        }
+        if(interacting && TimeUtils.millis() - lastAnim > jazzHandsSpeed){
             frame++;
             if (frame == 4) {
                 frame = 0;
@@ -159,8 +173,11 @@ public class Human extends Character {
         Vector2 coord = PaulGraphics.dupleToCoord(location);
         if (interacting) {
             coord.add(target.usingOffset);
+            jazzhands.drawMe(batch, coord, frame, direction);
+        } else {
+            walker.drawMe(batch, coord, frame,direction);
         }
-        walker.drawMe(batch, coord, frame,direction);
+
     }
 
     @Override

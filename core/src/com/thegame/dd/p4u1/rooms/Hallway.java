@@ -46,6 +46,7 @@ public class Hallway extends Room {
     public void addExits(Exit arg0) {
         arg0.setLocation(new Duple(6,2));
         arg0.newLocation = new Duple(3, 0);
+        arg0.engageDirection = 1;
         things.add(arg0);
 
     }

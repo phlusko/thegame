@@ -23,6 +23,7 @@ public class Desk  extends Thing{
         texture = new Texture("things/desk.png");
         sprite = new Sprite(texture);
         sprite.setSize(200, 200);
+        engageDirection = 1;
     }
 
     @Override
