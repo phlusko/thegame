@@ -18,6 +18,8 @@ import java.util.Iterator;
  */
 
 public class Walker {
+    boolean kid = false;
+    boolean baby = false;
     Sprite[][] sprites = new Sprite[4][4];
     Texture sprite_texture;
     TextureRegion sprite_region;
@@ -68,10 +70,11 @@ public class Walker {
 
     public Walker(int type) {
         this();
+        int quarter_width;
         switch (type) {
             case 1:
                 this.sprite_texture = new Texture(Gdx.files.internal("characters/head/krystal.png"));
-                int quarter_width = this.sprite_texture.getWidth() / 4;
+                quarter_width = this.sprite_texture.getWidth() / 4;
                 for(int i = 0; i < 4; i++) {
                     for (int j = 0; j < 4; j++) {
                         this.sprite_region = new TextureRegion(this.sprite_texture, 0 + (j * quarter_width), 0 + (i * quarter_width), quarter_width, quarter_width);
@@ -80,9 +83,112 @@ public class Walker {
                 }
                 setKrystalColors();
                 break;
+            case 2:
+                kid = true;
+                this.sprite_texture = new Texture(Gdx.files.internal("characters/head/luna.png"));
+                quarter_width = this.sprite_texture.getWidth() / 4;
+                for(int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        this.sprite_region = new TextureRegion(this.sprite_texture, 0 + (j * quarter_width), 0 + (i * quarter_width), quarter_width, quarter_width);
+                        this.sprites[j][i] = new Sprite(sprite_region);
+                    }
+                }
+                setLunaColors();
+                break;
+            case 3:
+                kid = true;
+                this.sprite_texture = new Texture(Gdx.files.internal("characters/head/wade.png"));
+                quarter_width = this.sprite_texture.getWidth() / 4;
+                for(int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        this.sprite_region = new TextureRegion(this.sprite_texture, 0 + (j * quarter_width), 0 + (i * quarter_width), quarter_width, quarter_width);
+                        this.sprites[j][i] = new Sprite(sprite_region);
+                    }
+                }
+                setWadeColors();
+                break;
+            case 4:
+                kid = true;
+                baby = true;
+                this.sprite_texture = new Texture(Gdx.files.internal("characters/head/luke.png"));
+                quarter_width = this.sprite_texture.getWidth() / 4;
+                for(int i = 0; i < 4; i++) {
+                    for (int j = 0; j < 4; j++) {
+                        this.sprite_region = new TextureRegion(this.sprite_texture, 0 + (j * quarter_width), 0 + (i * quarter_width), quarter_width, quarter_width);
+                        this.sprites[j][i] = new Sprite(sprite_region);
+                    }
+                }
+                setLukeColors();
+                break;
             default:
                 setPaulColors();
         }
+    }
+
+    public void setLunaColors() {
+        colorHasher.put("shirt_main", new Color(0xf385f7ff));
+        colorHasher.put("shirt_highlight", new Color(0xc066c3ff));
+        colorHasher.put("hands", new Color(0xf5dcd3ff));
+        colorHasher.put("pants", new Color(0xf93a8fff));
+        colorHasher.put("outline", new Color(0x10100fff));
+        colorHasher.put("shoes", new Color(0x38efffff));
+
+        colorHasher.put("belt", colorHasher.get("shirt_main"));
+
+        colorHasher.put("buckle_top", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_highlight_top", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_mid", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_mid_highlight", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_bottom", colorHasher.get("pants"));
+
+        colorHasher.put("cleavage", colorHasher.get("hands"));
+        colorHasher.put("necklace", colorHasher.get("hands"));
+
+
+    }
+
+    public void setLukeColors() {
+        colorHasher.put("shirt_main", new Color(0x15b200ff));
+        colorHasher.put("shirt_highlight", new Color(0x0f8000ff));
+        colorHasher.put("hands", new Color(0xf5dcd3ff));
+        colorHasher.put("pants", new Color(0xaa935bff));
+        colorHasher.put("outline", new Color(0x10100fff));
+        colorHasher.put("shoes", colorHasher.get("hands"));
+
+        colorHasher.put("belt", colorHasher.get("shirt_main"));
+
+        colorHasher.put("buckle_top", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_highlight_top", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_mid", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_mid_highlight", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_bottom", colorHasher.get("pants"));
+
+        colorHasher.put("cleavage", colorHasher.get("shirt_main"));
+        colorHasher.put("necklace", colorHasher.get("outline"));
+
+
+    }
+
+    public void setWadeColors() {
+        colorHasher.put("shirt_main", new Color(0x88f8ffff));
+        colorHasher.put("shirt_highlight", new Color(0x6dcbd1ff));
+        colorHasher.put("hands", new Color(0xf5dcd3ff));
+        colorHasher.put("pants", new Color(0x88f8ffff));
+        colorHasher.put("outline", new Color(0x10100fff));
+        colorHasher.put("shoes", new Color(0x38efffff));
+
+        colorHasher.put("belt", colorHasher.get("shirt_main"));
+
+        colorHasher.put("buckle_top", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_highlight_top", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_mid", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_mid_highlight", colorHasher.get("shirt_main"));
+        colorHasher.put("buckle_bottom", colorHasher.get("pants"));
+
+        colorHasher.put("cleavage", colorHasher.get("hands"));
+        colorHasher.put("necklace", colorHasher.get("hands"));
+
+
     }
 
     public void setPaulColors() {
@@ -121,15 +227,23 @@ public class Walker {
     }
 
     public void drawMe (SpriteBatch batch, Vector2 loc, int frame, int direction) {
+        int size;
+        if (baby) {
+            size = 75;
+        } else if (kid) {
+            size = 100;
+        } else {
+            size = 128;
+        }
         for (int index = 0; index < body_pieces.length; index++) {
             String curr = body_pieces[index];
-            spriteHasher.get(curr)[frame][direction].setSize(128, 128);
-            spriteHasher.get(curr)[frame][direction].setPosition(loc.x - 64, loc.y);
+            spriteHasher.get(curr)[frame][direction].setSize(size, size);
+            spriteHasher.get(curr)[frame][direction].setPosition(loc.x - (size / 2), loc.y);
             spriteHasher.get(curr)[frame][direction].setColor(colorHasher.get(curr));
             spriteHasher.get(curr)[frame][direction].draw(batch);
         }
-        this.sprites[frame][direction].setSize(128, 128);
-        this.sprites[frame][direction].setPosition(loc.x - 64, loc.y);
+        this.sprites[frame][direction].setSize(size, size);
+        this.sprites[frame][direction].setPosition(loc.x - (size / 2), loc.y);
         this.sprites[frame][direction].draw(batch);
     }
 

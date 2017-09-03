@@ -12,10 +12,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
+import com.thegame.dd.p4u1.characters.*;
 import com.thegame.dd.p4u1.characters.Character;
-import com.thegame.dd.p4u1.characters.Human;
-import com.thegame.dd.p4u1.characters.Krystal;
-import com.thegame.dd.p4u1.characters.Paul;
 import com.thegame.dd.p4u1.rooms.Hallway;
 import com.thegame.dd.p4u1.rooms.Office;
 import com.thegame.dd.p4u1.rooms.Room;
@@ -52,10 +50,14 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 	Office office;
 	Hallway hallway;
 	Paul paul;
-	Krystal krystal, krystal2, krystal3, krystal4;
+	Krystal krystal;
+	Luna luna;
+	Wade wade;
+	Luke luke;
 
 	boolean tapping = false;
 	Vector2 tap;
+
 
 	ArrayList<Vector2> clicks;
 	
@@ -75,13 +77,13 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 	    characters.add(paul);
 
 	    krystal = new Krystal(paul);
-        krystal2 = new Krystal(krystal);
-        krystal3 = new Krystal(krystal2);
-        krystal4 = new Krystal(krystal3);
+        luna = new Luna(krystal);
+        wade = new Wade(luna);
+        luke = new Luke(wade);
 	    characters.add(krystal);
-        characters.add(krystal2);
-        characters.add(krystal3);
-        characters.add(krystal4);
+        characters.add(luna);
+        characters.add(wade);
+        characters.add(luke);
 
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -145,7 +147,7 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 		shapeRenderer.setProjectionMatrix(camera.combined);
 
 		batch.begin();
-		thisRoom.drawMe(batch);
+		//thisRoom.drawMe(batch);
 		for(Iterator<Character> iter = characters.iterator(); iter.hasNext(); ) {
 			Character curr = iter.next();
 			curr.drawMe(batch);
