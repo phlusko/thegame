@@ -20,6 +20,10 @@ public class Duple {
         return x == arg0.x && y == arg0.y;
     }
 
+    public Duple clone() {
+        return new Duple(x, y);
+    }
+
     public void add(Duple arg0) {
         x += arg0.x;
         y += arg0.y;

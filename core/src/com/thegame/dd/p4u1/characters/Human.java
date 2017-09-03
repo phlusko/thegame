@@ -42,7 +42,6 @@ public class Human extends Character {
     public boolean exiting;
     public Exit exit;
 
-
     public Human() {
         super();
         interacting = false;
@@ -125,11 +124,12 @@ public class Human extends Character {
     }
 
     @Override
-    public void update() {
+    public void update(Room room) {
         if (walking && (TimeUtils.millis() - lastStepTime > walkingSpeed)) {
             lastStepTime = TimeUtils.millis();
             spotIndex++;
             updateDirection(location, path[spotIndex].location);
+            previous_location = location.clone();
             location = path[spotIndex].location;
             if (destination.same(location)) {
                 walking = false;
@@ -173,7 +173,7 @@ public class Human extends Character {
         Vector2 coord = PaulGraphics.dupleToCoord(location);
         if (interacting) {
             coord.add(target.usingOffset);
-            jazzhands.drawMe(batch, coord, frame, direction);
+            jazzhands.drawMe(batch, coord, frame, target.engageDirection);
         } else {
             walker.drawMe(batch, coord, frame,direction);
         }

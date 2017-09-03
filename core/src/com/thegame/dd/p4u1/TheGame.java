@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.thegame.dd.p4u1.characters.Character;
+import com.thegame.dd.p4u1.characters.Human;
+import com.thegame.dd.p4u1.characters.Krystal;
 import com.thegame.dd.p4u1.characters.Paul;
 import com.thegame.dd.p4u1.rooms.Hallway;
 import com.thegame.dd.p4u1.rooms.Office;
@@ -50,6 +52,7 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 	Office office;
 	Hallway hallway;
 	Paul paul;
+	Krystal krystal, krystal2, krystal3, krystal4;
 
 	boolean tapping = false;
 	Vector2 tap;
@@ -66,9 +69,19 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 	    office.addExit(new TopDoor(hallway));
 	    thisRoom = office;
         //thisRoom = hallway;
+		characters = new ArrayList<Character>();
+
 	    paul = new Paul(thisRoom.getMap().origin.location);
-	    characters = new ArrayList<Character>();
 	    characters.add(paul);
+
+	    krystal = new Krystal(paul);
+        krystal2 = new Krystal(krystal);
+        krystal3 = new Krystal(krystal2);
+        krystal4 = new Krystal(krystal3);
+	    characters.add(krystal);
+        characters.add(krystal2);
+        characters.add(krystal3);
+        characters.add(krystal4);
 
 		batch = new SpriteBatch();
 		camera = new OrthographicCamera();
@@ -78,9 +91,13 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 
 	public void changeRoom(Room newRoom, Duple newlocation) {
         tapping = false;
-        paul.stop();
         thisRoom = newRoom;
-        paul.location = newlocation;
+        for(Iterator<Character> iter = characters.iterator(); iter.hasNext(); ) {
+            Human curr = (Human)iter.next();
+            curr.stop();
+            curr.location = newlocation.clone();
+            curr.previous_location = newlocation.clone();
+        }
     }
 
 	public void logic() {
@@ -90,7 +107,7 @@ public class TheGame extends ApplicationAdapter implements GestureDetector.Gestu
 
 		for(Iterator<Character> iter = characters.iterator(); iter.hasNext(); ) {
 			Character curr = iter.next();
-			curr.update();
+			curr.update(thisRoom);
 		}
 		if (paul.exiting) {
             changeRoom(paul.exit.newRoom, paul.exit.newLocation);

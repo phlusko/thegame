@@ -52,7 +52,7 @@ public class Map {
         if (Spot.same(a, b)) {
             return new Spot[]{a};
         }
-        System.out.println(a.location + ", " + b.location);
+        //System.out.println(a.location + ", " + b.location);
         ArrayList<Spot> visited = new ArrayList<Spot>();
         ArrayList<Spot> needsVisit = new ArrayList<Spot>();
         needsVisit.add(a);
@@ -103,7 +103,7 @@ public class Map {
                 needsVisit.add(curr.west);
                 lasts.put(curr.west, curr);
             }
-            System.out.println(needsVisit.size());
+            //System.out.println(needsVisit.size());
         }
 
         System.out.println("really?");
@@ -131,7 +131,7 @@ public class Map {
     }
 
     public Spot getSpot(Duple arg0) {
-        System.out.println(spots[arg0.x][arg0.y].location + "+++");
+        //System.out.println(spots[arg0.x][arg0.y].location + "+++");
         return spots[arg0.x][arg0.y];
     }
 

@@ -11,6 +11,8 @@ import com.thegame.dd.p4u1.utils.Walker;
 
 public class Paul extends Human {
     public Paul(Duple loc) {
+        super();
         location = loc;
+        previous_location = loc;
     }
 }

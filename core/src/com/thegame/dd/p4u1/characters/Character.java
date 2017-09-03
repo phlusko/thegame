@@ -13,6 +13,7 @@ import com.thegame.dd.p4u1.utils.PaulGraphics;
 public abstract class Character {
     int life;
     public Duple location;
+    public Duple previous_location;
 
     public Character() {
         life = 100;
@@ -20,7 +21,7 @@ public abstract class Character {
     }
 
     abstract public void moveTo(Duple moveTo, Room room);
-    abstract public void update();
+    abstract public void update(Room room);
     abstract public boolean isAlive();
     abstract public void drawMe(SpriteBatch batch);
     abstract public void dispose();
